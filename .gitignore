@@ -53,3 +53,7 @@ desktop.ini
 # Logs
 logs/
 *.log
+!.env.example
+
+# raw client materials (source for scripts/prepare-assets.mjs, contains unpublished patient photos)
+.src-assets/

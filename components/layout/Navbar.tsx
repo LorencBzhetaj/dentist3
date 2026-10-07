@@ -1,99 +1,142 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { mainNav } from "@/data/navigation";
-import { siteConfig } from "@/lib/site-config";
 import { cn } from "@/lib/utils";
+import type { Locale } from "@/lib/i18n";
+import { siteConfig } from "@/lib/site-config";
+import { PhoneIcon } from "@/components/ui/Icons";
+import LanguageSwitcher from "./LanguageSwitcher";
 import MobileMenu from "./MobileMenu";
 
-export default function Navbar() {
+export interface NavbarProps {
+  locale: Locale;
+  items: { label: string; href: string }[];
+  labels: { book: string; call: string; menu: string; close: string; language: string; home: string };
+}
+
+export default function Navbar({ locale, items, labels }: NavbarProps) {
   const [scrolled, setScrolled] = useState(false);
+  const [pastHero, setPastHero] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const closeMenu = useCallback(() => setMenuOpen(false), []);
   const pathname = usePathname();
+  const isHome = pathname === `/${locale}`;
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20);
+    const onScroll = () => {
+      setScrolled(window.scrollY > 20);
+      setPastHero(window.scrollY > window.innerHeight * 0.7);
+    };
+    onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  // On the home page the mobile hero is a full-bleed photo: keep the bar transparent with a light logo.
+  const overPhoto = isHome && !scrolled;
 
   return (
     <>
       <header
         className={cn(
           "fixed top-0 left-0 right-0 z-30 transition-all duration-300",
-          scrolled ? "bg-white/95 backdrop-blur-md shadow-sm border-b border-slate-100" : "bg-transparent"
+          scrolled ? "bg-white/95 backdrop-blur-md shadow-[0_1px_0_rgba(23,20,17,0.06)]" : "bg-transparent"
         )}
       >
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16 lg:h-20">
-            {/* Logo */}
-            <Link href="/" className="flex items-center gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 rounded-lg">
-              <div className="w-8 h-8 bg-teal-600 rounded-lg flex items-center justify-center">
-                <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                </svg>
-              </div>
-              <span className="font-semibold text-navy-900 text-lg tracking-tight">{siteConfig.name}</span>
+            <Link href={`/${locale}`} className="relative block h-9 w-[110px] lg:h-11 lg:w-[134px]" aria-label={`${siteConfig.name} – ${labels.home}`}>
+              <Image
+                src="/images/brand/wordmark.png"
+                alt=""
+                fill
+                priority
+                sizes="134px"
+                className={cn("object-contain object-left", overPhoto && "max-lg:opacity-0")}
+              />
+              <Image
+                src="/images/brand/wordmark-light.png"
+                alt=""
+                fill
+                priority
+                sizes="110px"
+                className={cn("object-contain object-left lg:hidden transition-opacity", overPhoto ? "opacity-100" : "opacity-0")}
+              />
             </Link>
 
-            {/* Desktop nav */}
-            <nav className="hidden lg:flex items-center gap-1">
-              {mainNav.map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className={cn(
-                    "px-4 py-2 rounded-full text-sm font-medium transition-colors",
-                    pathname === item.href
-                      ? "text-teal-600 bg-teal-50"
-                      : "text-slate-600 hover:text-navy-900 hover:bg-slate-50"
-                  )}
-                >
-                  {item.label}
-                </Link>
-              ))}
+            <nav className="hidden lg:flex items-center gap-1" aria-label="Main">
+              {items.map((item) => {
+                const active = item.href === `/${locale}` ? pathname === item.href : pathname.startsWith(item.href);
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    aria-current={active ? "page" : undefined}
+                    className={cn(
+                      "px-4 py-2 text-sm tracking-wide transition-colors",
+                      active ? "text-ink" : "text-muted hover:text-ink"
+                    )}
+                  >
+                    <span className={cn("border-b pb-1", active ? "border-sand-500" : "border-transparent")}>{item.label}</span>
+                  </Link>
+                );
+              })}
             </nav>
 
-            {/* CTA */}
-            <div className="hidden lg:flex items-center gap-4">
-              <a href={`tel:${siteConfig.phone}`} className="text-sm text-slate-500 hover:text-navy-900 transition-colors">
+            <div className="hidden lg:flex items-center gap-5">
+              <LanguageSwitcher locale={locale} label={labels.language} />
+              <a href={siteConfig.phoneHref} className="text-sm text-muted hover:text-ink transition-colors">
                 {siteConfig.phone}
               </a>
               <Link
-                href="/contact"
-                className="bg-teal-600 text-white text-sm font-medium px-6 py-2.5 rounded-full hover:bg-teal-700 transition-colors"
+                href={`/${locale}/contact#request`}
+                className="bg-ink text-white text-sm font-medium tracking-wide px-6 py-2.5 rounded-full hover:bg-ink-soft transition-colors"
               >
-                Book Visit
+                {labels.book}
               </Link>
             </div>
 
-            {/* Mobile hamburger */}
             <button
-              className="lg:hidden p-2 rounded-lg hover:bg-slate-100 transition-colors"
+              className={cn("lg:hidden -mr-2 p-2 rounded-lg transition-colors", overPhoto ? "text-white" : "text-ink")}
               onClick={() => setMenuOpen(true)}
-              aria-label="Open menu"
+              aria-label={labels.menu}
+              aria-expanded={menuOpen}
             >
-              <svg className="w-6 h-6 text-navy-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path strokeLinecap="round" strokeWidth={1.5} d="M4 7h16M4 12h16M4 17h16" />
               </svg>
             </button>
           </div>
         </div>
       </header>
 
-      <MobileMenu isOpen={menuOpen} onClose={() => setMenuOpen(false)} />
+      <MobileMenu isOpen={menuOpen} onClose={closeMenu} locale={locale} items={items} labels={labels} />
 
-      {/* Mobile sticky CTA */}
-      <div className="lg:hidden fixed bottom-0 left-0 right-0 z-20 p-4 bg-white border-t border-slate-100 shadow-lg">
-        <Link
-          href="/contact"
-          className="flex items-center justify-center w-full bg-teal-600 text-white font-medium py-3.5 rounded-full hover:bg-teal-700 transition-colors"
-        >
-          Book a Consultation
-        </Link>
+      {/* Mobile sticky actions. On the home page they appear once the hero (which has its own buttons) is scrolled past. */}
+      <div
+        className={cn(
+          "lg:hidden fixed bottom-0 left-0 right-0 z-20 px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] bg-white/95 backdrop-blur border-t border-sand-200 transition-transform duration-300",
+          isHome && !pastHero ? "translate-y-full" : "translate-y-0"
+        )}
+      >
+        <div className="grid grid-cols-[auto_1fr] gap-3">
+          <a
+            href={siteConfig.phoneHref}
+            className="flex items-center justify-center gap-2 border border-ink/20 text-ink text-sm font-medium px-5 py-3 rounded-full"
+          >
+            <PhoneIcon className="w-4 h-4" />
+            {labels.call}
+          </a>
+          <Link
+            href={`/${locale}/contact#request`}
+            className="flex items-center justify-center bg-ink text-white text-sm font-medium py-3 rounded-full"
+          >
+            {labels.book}
+          </Link>
+        </div>
       </div>
     </>
   );

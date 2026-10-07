@@ -1,5 +1,0 @@
-Place real images in the respective subfolders:
-- clinic/ : hero.jpg, about-hero.jpg, story.jpg, gallery-1.jpg through gallery-6.jpg
-- doctors/ : arben-hoxha.jpg, elira-zogaj.jpg, gentian-kola.jpg, valbona-daci.jpg
-- services/ : implants.jpg, implants-hero.jpg, whitening.jpg, whitening-hero.jpg, veneers.jpg, veneers-hero.jpg, orthodontics.jpg, orthodontics-hero.jpg, general.jpg, general-hero.jpg, emergency.jpg, emergency-hero.jpg
-- transformations/ : v1-before.jpg, v1-after.jpg, w1-before.jpg, w1-after.jpg, i1-before.jpg, i1-after.jpg, o1-before.jpg, o1-after.jpg, v2-before.jpg, v2-after.jpg, w2-before.jpg, w2-after.jpg, i2-before.jpg, i2-after.jpg, o2-before.jpg, o2-after.jpg

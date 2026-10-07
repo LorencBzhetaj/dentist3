@@ -1,35 +1,27 @@
-import { MetadataRoute } from "next";
+import type { MetadataRoute } from "next";
 import { siteConfig } from "@/lib/site-config";
-import { services } from "@/data/services";
-import { doctors } from "@/data/doctors";
+import { locales } from "@/lib/i18n";
+import { serviceSlugs } from "@/data/services";
+
+const routes: { path: string; priority: number }[] = [
+  { path: "", priority: 1 },
+  { path: "/services", priority: 0.9 },
+  ...serviceSlugs.map((slug) => ({ path: `/services/${slug}`, priority: 0.8 })),
+  { path: "/about", priority: 0.7 },
+  { path: "/before-after", priority: 0.6 },
+  { path: "/contact", priority: 0.9 },
+  { path: "/privacy-policy", priority: 0.2 },
+  { path: "/terms", priority: 0.2 },
+];
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const base = siteConfig.url;
-  const staticRoutes = [
-    { url: base, priority: 1 },
-    { url: `${base}/services`, priority: 0.9 },
-    { url: `${base}/about`, priority: 0.8 },
-    { url: `${base}/doctors`, priority: 0.8 },
-    { url: `${base}/before-after`, priority: 0.7 },
-    { url: `${base}/reviews`, priority: 0.7 },
-    { url: `${base}/contact`, priority: 0.9 },
-    { url: `${base}/privacy-policy`, priority: 0.3 },
-    { url: `${base}/terms`, priority: 0.3 },
-  ].map((r) => ({ ...r, lastModified: new Date(), changeFrequency: "monthly" as const }));
-
-  const serviceRoutes = services.map((s) => ({
-    url: `${base}/services/${s.slug}`,
-    lastModified: new Date(),
-    changeFrequency: "monthly" as const,
-    priority: 0.8,
-  }));
-
-  const doctorRoutes = doctors.map((d) => ({
-    url: `${base}/doctors/${d.slug}`,
-    lastModified: new Date(),
-    changeFrequency: "monthly" as const,
-    priority: 0.7,
-  }));
-
-  return [...staticRoutes, ...serviceRoutes, ...doctorRoutes];
+  return routes.flatMap(({ path, priority }) =>
+    locales.map((locale) => ({
+      url: `${siteConfig.url}/${locale}${path}`,
+      lastModified: new Date(),
+      changeFrequency: "monthly" as const,
+      priority,
+      alternates: { languages: Object.fromEntries(locales.map((l) => [l, `${siteConfig.url}/${l}${path}`])) },
+    }))
+  );
 }

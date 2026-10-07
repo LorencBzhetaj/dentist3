@@ -1,30 +1,29 @@
+// Verified clinic facts only. Anything not confirmed by the clinic stays out of here.
 export const siteConfig = {
-  name: "DentaCare",
-  tagline: "Advanced Dental Care Designed Around You",
-  description:
-    "Premium dental clinic offering implants, veneers, whitening, orthodontics, and general dentistry. Trusted by 8,000+ patients.",
-  url: process.env.NEXT_PUBLIC_SITE_URL || "https://dentacare.com",
-  phone: "+383 44 123 456",
-  email: "info@dentacare.com",
+  name: "Sorèr Dental Clinic",
+  shortName: "Sorèr",
+  url: process.env.NEXT_PUBLIC_SITE_URL || "https://sorer-dental.vercel.app",
+  phone: "+355 68 476 7455",
+  phoneHref: "tel:+355684767455",
+  nipt: "M52109034H",
   address: {
-    street: "Dr. Ditan Hoxha, Prishtina 10000",
-    city: "Prishtina",
-    country: "Kosovo",
+    building: "Garden Building",
+    street: "Rruga e Kavajës",
+    city: "Tiranë",
+    postalCode: "1001",
+    country: "Shqipëri",
+    countryCode: "AL",
   },
-  hours: {
-    weekdays: "Mon – Fri: 09:00 – 19:00",
-    saturday: "Saturday: 09:00 – 15:00",
-    sunday: "Sunday: Closed",
-  },
+  geo: { lat: 41.3268457, lng: 19.8063863 },
   social: {
-    facebook: "https://facebook.com/dentacare",
-    instagram: "https://instagram.com/dentacare",
-    linkedin: "https://linkedin.com/company/dentacare",
+    instagram: "https://www.instagram.com/sorer_dental_clinic/",
+    instagramHandle: "@sorer_dental_clinic",
   },
-  stats: [
-    { value: "15+", label: "Years of Experience" },
-    { value: "8K+", label: "Happy Patients" },
-    { value: "4.9/5", label: "Google Rating" },
-    { value: "98%", label: "Patient Satisfaction" },
-  ],
 } as const;
+
+export const fullAddress = `${siteConfig.address.building}, ${siteConfig.address.street}, ${siteConfig.address.city} ${siteConfig.address.postalCode}`;
+
+export const mapsDirectionsUrl = `https://www.google.com/maps/dir/?api=1&destination=${siteConfig.geo.lat},${siteConfig.geo.lng}`;
+export const mapsPlaceUrl = `https://www.google.com/maps/search/?api=1&query=${siteConfig.geo.lat},${siteConfig.geo.lng}`;
+export const mapsEmbedUrl = (lang: string) =>
+  `https://maps.google.com/maps?q=${siteConfig.geo.lat},${siteConfig.geo.lng}&z=17&hl=${lang}&output=embed`;

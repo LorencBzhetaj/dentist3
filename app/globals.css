@@ -1,27 +1,27 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #0d1b2a;
-}
-
+/* Sorèr palette: warm whites, the beige of the logo's tooth outline, near-black ink and walnut. */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-  --color-navy-50: #f0f4f8;
-  --color-navy-900: #0d1b2a;
-  --color-teal-50: #f0fdfa;
-  --color-teal-100: #ccfbf1;
-  --color-teal-400: #2dd4bf;
-  --color-teal-500: #14b8a6;
-  --color-teal-600: #0d9488;
-  --color-teal-700: #0f766e;
+  --font-sans: var(--font-jost), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-cormorant), ui-serif, Georgia, serif;
+
+  --color-ink: #171411;
+  --color-ink-soft: #3a332d;
+  --color-muted: #6f655b;
+  --color-sand-50: #fbf9f6;
+  --color-sand-100: #f5efe8;
+  --color-sand-200: #ebe1d5;
+  --color-sand-300: #d9c7b0;
+  --color-sand-400: #c2a688;
+  --color-sand-500: #a68664;
+  --color-sand-600: #86694c;
+  --color-sand-700: #6b533c;
+  --color-sand-800: #4a3a2b;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+  background: #ffffff;
+  color: var(--color-ink);
 }
 
 @layer base {
@@ -30,7 +30,14 @@ body {
     -webkit-font-smoothing: antialiased;
   }
 
-  * {
-    box-sizing: border-box;
+  :focus-visible {
+    outline: 2px solid var(--color-sand-600);
+    outline-offset: 2px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
   }
 }

@@ -1,17 +1,24 @@
 import { z } from "zod";
+import { locales } from "./i18n";
+import { serviceSlugs } from "@/data/services";
 
+// Messages are dictionary keys (form.errors.*) so the client can show them in the active language.
 export const contactFormSchema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters").max(100),
+  name: z.string().trim().min(2, "name").max(100, "name"),
   phone: z
     .string()
-    .min(6, "Enter a valid phone number")
-    .max(20)
-    .regex(/^[+\d\s\-()]+$/, "Invalid phone number format"),
-  email: z.string().email("Enter a valid email address"),
-  service: z.string().min(1, "Please select a service"),
-  preferredDate: z.string().optional(),
-  message: z.string().max(1000, "Message too long").optional(),
-  honeypot: z.string().max(0, "Bot detected").optional(),
+    .trim()
+    .min(6, "phone")
+    .max(20, "phone")
+    .regex(/^[+\d\s\-()]+$/, "phone"),
+  email: z.union([z.literal(""), z.string().trim().email("email")]).optional(),
+  service: z.enum([...serviceSlugs, "other"], { message: "service" }),
+  preferredDate: z.string().max(10).optional(),
+  message: z.string().max(1000, "message").optional(),
+  consent: z.literal(true, { message: "consent" }),
+  locale: z.enum(locales).optional(),
+  honeypot: z.string().max(0).optional(),
 });
 
 export type ContactFormData = z.infer<typeof contactFormSchema>;
+export type ContactErrorKey = "name" | "phone" | "email" | "service" | "message" | "consent";

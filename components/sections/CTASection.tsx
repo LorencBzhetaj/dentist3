@@ -1,42 +1,43 @@
-"use client";
-
-import { motion } from "framer-motion";
-import Link from "next/link";
+import Image from "next/image";
+import { siteConfig } from "@/lib/site-config";
+import { href, type Locale } from "@/lib/i18n";
+import type { Dictionary } from "@/dictionaries";
 import Container from "@/components/ui/Container";
+import LinkButton from "@/components/ui/LinkButton";
+import { PhoneIcon } from "@/components/ui/Icons";
 
 interface CTASectionProps {
+  locale: Locale;
+  dict: Dictionary;
   title?: string;
   subtitle?: string;
-  primaryLabel?: string;
-  primaryHref?: string;
 }
 
-export default function CTASection({
-  title = "Ready for a Better Smile?",
-  subtitle = "Book your consultation today and take the first step.",
-  primaryLabel = "Book a Visit",
-  primaryHref = "/contact",
-}: CTASectionProps) {
+export default function CTASection({ locale, dict, title = dict.cta.title, subtitle = dict.cta.subtitle }: CTASectionProps) {
   return (
-    <section className="py-20 bg-teal-600 relative overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-br from-teal-600 to-teal-700" />
+    <section className="relative py-20 lg:py-24 bg-ink overflow-hidden">
+      <Image
+        src="/images/brand/logo-light.png"
+        alt=""
+        width={1272}
+        height={959}
+        className="absolute -right-24 -bottom-16 w-[520px] h-auto opacity-[0.06] pointer-events-none select-none"
+        aria-hidden="true"
+      />
       <Container className="relative">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="text-center max-w-2xl mx-auto"
-        >
-          <h2 className="text-3xl sm:text-4xl font-semibold text-white tracking-tight mb-4">{title}</h2>
-          <p className="text-teal-100 text-lg mb-8">{subtitle}</p>
-          <Link
-            href={primaryHref}
-            className="inline-flex items-center justify-center bg-white text-teal-700 font-semibold px-9 py-4 rounded-full hover:bg-teal-50 transition-colors text-sm shadow-lg"
-          >
-            {primaryLabel}
-          </Link>
-        </motion.div>
+        <div className="max-w-2xl">
+          <h2 className="font-serif text-4xl sm:text-5xl text-white leading-tight mb-4">{title}</h2>
+          <p className="text-sand-200/80 text-lg mb-9">{subtitle}</p>
+          <div className="flex flex-col sm:flex-row gap-3">
+            <LinkButton href={href(locale, "/contact#request")} variant="light">
+              {dict.common.requestConsult}
+            </LinkButton>
+            <LinkButton href={siteConfig.phoneHref} variant="ghost-light">
+              <PhoneIcon className="w-4 h-4" />
+              {siteConfig.phone}
+            </LinkButton>
+          </div>
+        </div>
       </Container>
     </section>
   );

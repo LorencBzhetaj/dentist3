@@ -1,75 +1,62 @@
-"use client";
-
-import { motion } from "framer-motion";
 import Link from "next/link";
-import Image from "next/image";
-import { services } from "@/data/services";
+import { href, type Locale } from "@/lib/i18n";
+import type { Dictionary } from "@/dictionaries";
+import { serviceSlugs, serviceMeta } from "@/data/services";
 import SectionHeading from "@/components/ui/SectionHeading";
 import Container from "@/components/ui/Container";
+import Reveal from "@/components/ui/Reveal";
+import { ArrowIcon, ServiceGlyph } from "@/components/ui/Icons";
 
-export default function ServicesPreview() {
+export default function ServicesPreview({ locale, dict }: { locale: Locale; dict: Dictionary }) {
   return (
     <section className="py-20 lg:py-28 bg-white">
       <Container>
-        <div className="flex items-end justify-between mb-12">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-12">
           <SectionHeading
-            eyebrow="What We Offer"
-            title="Our Services"
-            subtitle="Comprehensive dental care with attention to detail and a gentle touch."
+            eyebrow={dict.home.services.eyebrow}
+            title={dict.home.services.title}
+            subtitle={dict.home.services.subtitle}
             align="left"
           />
-          <Link href="/services" className="hidden sm:inline-flex items-center text-sm text-teal-600 font-medium hover:text-teal-700 transition-colors">
-            View All Services
-            <svg className="ml-1.5 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-            </svg>
+          <Link
+            href={href(locale, "/services")}
+            className="inline-flex items-center gap-2 text-sm text-ink border-b border-sand-400 pb-1 hover:border-ink transition-colors self-start sm:self-auto shrink-0"
+          >
+            {dict.common.allServices}
+            <ArrowIcon />
           </Link>
         </div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {services.map((service, i) => (
-            <motion.div
-              key={service.slug}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: i * 0.07 }}
-            >
-              <Link
-                href={`/services/${service.slug}`}
-                className="group block rounded-2xl overflow-hidden border border-slate-100 hover:border-teal-200 hover:shadow-lg transition-all duration-300"
-              >
-                <div className="relative h-44 overflow-hidden bg-teal-50">
-                  <Image
-                    src={service.image}
-                    alt={service.title}
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-500"
-                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                  />
-                </div>
-                <div className="p-5">
-                  <h3 className="font-semibold text-[#0d1b2a] mb-2 group-hover:text-teal-600 transition-colors">{service.title}</h3>
-                  <p className="text-sm text-slate-500 leading-relaxed line-clamp-2">{service.shortDescription}</p>
-                  <span className="inline-flex items-center text-xs text-teal-600 font-medium mt-4">
-                    Learn More
-                    <svg className="ml-1 w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </svg>
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-px bg-sand-200 border border-sand-200 rounded-3xl overflow-hidden">
+          {serviceSlugs.map((slug, i) => {
+            const s = dict.services.items[slug];
+            return (
+              <Reveal key={slug} delay={i * 0.04} className="bg-white">
+                <Link href={href(locale, `/services/${slug}`)} className="group flex flex-col h-full p-6 sm:p-7 hover:bg-sand-50 transition-colors">
+                  <div className="flex items-start justify-between mb-4 sm:mb-8">
+                    <span className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-sand-100 text-sand-700 flex items-center justify-center group-hover:bg-ink group-hover:text-sand-200 transition-colors">
+                      <ServiceGlyph icon={serviceMeta[slug].icon} />
+                    </span>
+                    <span className="text-xs text-sand-500 tabular-nums">{String(i + 1).padStart(2, "0")}</span>
+                  </div>
+                  <h3 className="font-serif text-2xl text-ink mb-2">{s.title}</h3>
+                  <p className="text-sm text-muted leading-relaxed flex-1">{s.short}</p>
+                  <span className="inline-flex items-center gap-1.5 text-xs tracking-wide uppercase text-sand-700 mt-4 sm:mt-6">
+                    {dict.common.learnMore}
+                    <ArrowIcon className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                   </span>
-                </div>
-              </Link>
-            </motion.div>
-          ))}
-        </div>
-
-        <div className="mt-8 text-center sm:hidden">
-          <Link href="/services" className="inline-flex items-center text-sm text-teal-600 font-medium">
-            View All Services
-            <svg className="ml-1.5 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-            </svg>
-          </Link>
+                </Link>
+              </Reveal>
+            );
+          })}
+          {/* Fills the 8th cell of the 2- and 4-column grids with a contact prompt */}
+          <div className="hidden sm:flex flex-col justify-between gap-6 bg-ink text-white p-7">
+            <p className="font-serif text-2xl leading-snug">{dict.cta.title}</p>
+            <Link href={href(locale, "/contact#request")} className="inline-flex items-center gap-2 text-sm text-sand-300 hover:text-white transition-colors">
+              {dict.common.requestConsult}
+              <ArrowIcon />
+            </Link>
+          </div>
         </div>
       </Container>
     </section>

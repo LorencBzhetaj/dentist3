@@ -1,42 +1,35 @@
-import { Metadata } from "next";
+import type { Metadata } from "next";
 import { siteConfig } from "./site-config";
+import { locales, localeLabels, type Locale } from "./i18n";
 
-interface SeoProps {
-  title?: string;
-  description?: string;
+interface PageMetaInput {
+  locale: Locale;
+  /** Path without locale prefix, e.g. "/services" or "/" */
   path?: string;
-  image?: string;
+  title?: string;
+  description: string;
 }
 
-export function generateMetadata({
-  title,
-  description,
-  path = "",
-  image = "/images/og-image.jpg",
-}: SeoProps = {}): Metadata {
-  const fullTitle = title ? `${title} | ${siteConfig.name}` : `${siteConfig.name} – ${siteConfig.tagline}`;
-  const desc = description || siteConfig.description;
-  const url = `${siteConfig.url}${path}`;
+export function pageMetadata({ locale, path = "/", title, description }: PageMetaInput): Metadata {
+  const suffix = path === "/" ? "" : path;
+  const url = `${siteConfig.url}/${locale}${suffix}`;
+  const languages = Object.fromEntries(locales.map((l) => [l, `${siteConfig.url}/${l}${suffix}`]));
 
   return {
-    title: fullTitle,
-    description: desc,
-    metadataBase: new URL(siteConfig.url),
-    alternates: { canonical: url },
+    ...(title ? { title } : {}),
+    description,
+    alternates: {
+      canonical: url,
+      languages: { ...languages, "x-default": `${siteConfig.url}/sq${suffix}` },
+    },
     openGraph: {
-      title: fullTitle,
-      description: desc,
+      ...(title ? { title: `${title} | ${siteConfig.name}` } : {}),
+      description,
       url,
       siteName: siteConfig.name,
-      images: [{ url: image, width: 1200, height: 630, alt: fullTitle }],
+      locale: localeLabels[locale].og,
       type: "website",
-      locale: "en_US",
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: fullTitle,
-      description: desc,
-      images: [image],
+      images: [{ url: "/images/og-image.jpg", width: 1200, height: 630, alt: siteConfig.name }],
     },
   };
 }

@@ -14,13 +14,13 @@ type TextareaProps = BaseProps & Omit<TextareaHTMLAttributes<HTMLTextAreaElement
 
 type FormFieldProps = InputProps | SelectProps | TextareaProps;
 
-const inputClass = "w-full border border-slate-200 rounded-xl px-4 py-3 text-sm text-[#0d1b2a] placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-600 focus:border-transparent transition-shadow bg-white";
+const inputClass = "w-full border border-sand-200 rounded-xl px-4 py-3 text-sm text-ink placeholder:text-stone-400 focus:outline-none focus:ring-2 focus:ring-sand-500 focus:border-transparent transition-shadow bg-white";
 
 export const FormField = forwardRef<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement, FormFieldProps>(
   ({ label, error, className, id, ...props }, ref) => {
     return (
       <div className={cn("flex flex-col gap-1.5", className)}>
-        <label htmlFor={id} className="text-sm font-medium text-[#0d1b2a]">
+        <label htmlFor={id} className="text-sm font-medium text-ink">
           {label}
         </label>
         {props.as === "select" ? (
@@ -48,7 +48,7 @@ export const FormField = forwardRef<HTMLInputElement | HTMLSelectElement | HTMLT
             {...(props as Omit<InputHTMLAttributes<HTMLInputElement>, "id">)}
           />
         )}
-        {error && <p className="text-xs text-red-500 mt-0.5">{error}</p>}
+        {error && <p className="text-xs text-red-600 mt-0.5">{error}</p>}
       </div>
     );
   }
