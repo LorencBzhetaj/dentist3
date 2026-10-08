@@ -1,18 +1,11 @@
-"use client";
+import { cn } from "@/lib/utils";
 
-import { motion, useReducedMotion } from "framer-motion";
-
+// CSS-only reveal (see .reveal in globals.css). Content is always rendered visible, so it never
+// depends on JavaScript; browsers without scroll-driven animations simply skip the effect.
 export default function Reveal({ children, delay = 0, className }: { children: React.ReactNode; delay?: number; className?: string }) {
-  const reduce = useReducedMotion();
   return (
-    <motion.div
-      initial={reduce ? false : { opacity: 0, y: 18 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-40px" }}
-      transition={{ duration: 0.5, delay, ease: "easeOut" }}
-      className={className}
-    >
+    <div className={cn("reveal", className)} style={delay ? ({ "--reveal-shift": `${18 + delay * 40}px` } as React.CSSProperties) : undefined}>
       {children}
-    </motion.div>
+    </div>
   );
 }

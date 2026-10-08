@@ -41,3 +41,21 @@ body {
     scroll-behavior: auto;
   }
 }
+
+/* Scroll-driven fade-up for <Reveal>. Progressive enhancement: no JS, no hidden initial state. */
+@keyframes reveal-up {
+  from {
+    opacity: 0;
+    transform: translateY(var(--reveal-shift, 18px));
+  }
+}
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal {
+      animation: reveal-up linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 35%;
+    }
+  }
+}

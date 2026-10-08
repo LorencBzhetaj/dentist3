@@ -13,7 +13,9 @@ export type ServiceSlug = (typeof serviceSlugs)[number];
 
 export type ServiceIcon = "implant" | "crown" | "braces" | "aligner" | "sparkle" | "graft" | "travel";
 
-export const serviceMeta: Record<ServiceSlug, { icon: ServiceIcon; related: ServiceSlug[] }> = {
+// image: path in /public/images/services/ once the clinic supplies a photo for the service.
+// Until then the card shows a branded panel with the service icon instead of a broken image.
+export const serviceMeta: Record<ServiceSlug, { icon: ServiceIcon; related: ServiceSlug[]; image?: string }> = {
   "dental-implants": { icon: "implant", related: ["bone-grafting", "prosthodontics"] },
   prosthodontics: { icon: "crown", related: ["dental-implants", "cosmetic-dentistry"] },
   orthodontics: { icon: "braces", related: ["invisalign", "cosmetic-dentistry"] },

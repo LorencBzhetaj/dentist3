@@ -62,7 +62,7 @@ export default function MobileMenu({ isOpen, onClose, locale, items, labels }: M
               key={item.href}
               href={item.href}
               onClick={onClose}
-              className="font-serif text-2xl text-ink py-2.5 px-3 rounded-xl hover:bg-sand-100 transition-colors"
+              className="font-serif text-2xl text-ink py-2.5 px-3 rounded-xl hover:bg-sand-100 hover:text-sand-700 transition-colors"
             >
               {item.label}
             </Link>

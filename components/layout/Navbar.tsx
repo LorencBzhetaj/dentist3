@@ -67,7 +67,7 @@ export default function Navbar({ locale, items, labels }: NavbarProps) {
               />
             </Link>
 
-            <nav className="hidden lg:flex items-center gap-1" aria-label="Main">
+            <nav className="hidden lg:flex items-center gap-0.5 xl:gap-1" aria-label="Main">
               {items.map((item) => {
                 const active = item.href === `/${locale}` ? pathname === item.href : pathname.startsWith(item.href);
                 return (
@@ -76,24 +76,24 @@ export default function Navbar({ locale, items, labels }: NavbarProps) {
                     href={item.href}
                     aria-current={active ? "page" : undefined}
                     className={cn(
-                      "px-4 py-2 text-sm tracking-wide transition-colors",
-                      active ? "text-ink" : "text-muted hover:text-ink"
+                      "px-3 xl:px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors",
+                      active ? "text-sand-700 bg-sand-100" : "text-muted hover:text-ink hover:bg-sand-50"
                     )}
                   >
-                    <span className={cn("border-b pb-1", active ? "border-sand-500" : "border-transparent")}>{item.label}</span>
+                    {item.label}
                   </Link>
                 );
               })}
             </nav>
 
-            <div className="hidden lg:flex items-center gap-5">
+            <div className="hidden lg:flex items-center gap-4 xl:gap-5">
               <LanguageSwitcher locale={locale} label={labels.language} />
-              <a href={siteConfig.phoneHref} className="text-sm text-muted hover:text-ink transition-colors">
+              <a href={siteConfig.phoneHref} className="hidden xl:inline text-sm text-muted whitespace-nowrap hover:text-ink transition-colors">
                 {siteConfig.phone}
               </a>
               <Link
                 href={`/${locale}/contact#request`}
-                className="bg-ink text-white text-sm font-medium tracking-wide px-6 py-2.5 rounded-full hover:bg-ink-soft transition-colors"
+                className="bg-ink text-white text-sm font-medium tracking-wide whitespace-nowrap px-5 xl:px-6 py-2.5 rounded-full hover:bg-ink-soft transition-colors"
               >
                 {labels.book}
               </Link>
