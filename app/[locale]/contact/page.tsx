@@ -41,7 +41,7 @@ export default async function ContactPage({ params, searchParams }: Props) {
               <MapEmbed locale={locale} dict={dict} />
             </div>
 
-            <div id="request" className="scroll-mt-24 bg-sand-50 rounded-[2rem] p-6 sm:p-9 border border-sand-200">
+            <div id="request" className="scroll-mt-28 bg-sand-50 rounded-[2rem] p-6 sm:p-9 border border-sand-200">
               <h2 className="font-serif text-4xl text-ink mb-3">{t.formTitle}</h2>
               <p className="text-sm text-muted leading-relaxed mb-8">{t.formSubtitle}</p>
               <AppointmentForm

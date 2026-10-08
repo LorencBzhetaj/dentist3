@@ -48,8 +48,8 @@ export default function MobileMenu({ isOpen, onClose, locale, items, labels }: M
         aria-modal="true"
         aria-label={siteConfig.name}
       >
-        <div className="flex items-center justify-between px-5 h-16 border-b border-sand-200">
-          <Image src="/images/brand/wordmark.png" alt={siteConfig.name} width={1272} height={416} className="h-8 w-auto" />
+        <div className="flex items-center justify-between px-5 h-20 border-b border-sand-200">
+          <Image src="/images/brand/logo.png" alt={siteConfig.name} width={1272} height={959} className="h-12 w-auto" />
           <button onClick={onClose} className="p-2 -mr-2 rounded-lg hover:bg-sand-100 transition-colors" aria-label={labels.close}>
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path strokeLinecap="round" strokeWidth={1.5} d="M6 18L18 6M6 6l12 12" />

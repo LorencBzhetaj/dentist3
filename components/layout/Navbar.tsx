@@ -47,22 +47,22 @@ export default function Navbar({ locale, items, labels }: NavbarProps) {
         )}
       >
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16 lg:h-20">
-            <Link href={`/${locale}`} className="relative block h-9 w-[110px] lg:h-11 lg:w-[134px]" aria-label={`${siteConfig.name} – ${labels.home}`}>
+          <div className="flex items-center justify-between h-20 lg:h-24">
+            <Link href={`/${locale}`} className="relative block h-14 w-[75px] lg:h-[72px] lg:w-[96px] shrink-0" aria-label={`${siteConfig.name} – ${labels.home}`}>
               <Image
-                src="/images/brand/wordmark.png"
+                src="/images/brand/logo.png"
                 alt=""
                 fill
                 priority
-                sizes="134px"
+                sizes="96px"
                 className={cn("object-contain object-left", overPhoto && "max-lg:opacity-0")}
               />
               <Image
-                src="/images/brand/wordmark-light.png"
+                src="/images/brand/logo-light.png"
                 alt=""
                 fill
                 priority
-                sizes="110px"
+                sizes="75px"
                 className={cn("object-contain object-left lg:hidden transition-opacity", overPhoto ? "opacity-100" : "opacity-0")}
               />
             </Link>

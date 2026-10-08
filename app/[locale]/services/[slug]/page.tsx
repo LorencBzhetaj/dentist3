@@ -99,7 +99,7 @@ export default async function ServicePage({ params }: Props) {
               <p className="text-sm text-muted italic">{t.disclaimer}</p>
             </div>
 
-            <aside className="lg:sticky lg:top-28 self-start space-y-6">
+            <aside className="lg:sticky lg:top-32 self-start space-y-6">
               <div className="bg-sand-50 rounded-3xl p-7 border border-sand-200">
                 <span className="w-14 h-14 rounded-full bg-white text-sand-700 flex items-center justify-center mb-5 border border-sand-200">
                   <ServiceGlyph icon={serviceMeta[slug].icon} />

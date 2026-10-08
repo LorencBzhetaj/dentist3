@@ -43,7 +43,7 @@ export default function Hero({ locale, dict }: { locale: Locale; dict: Dictionar
       </section>
 
       {/* Desktop: text + treatment room photo */}
-      <section className="relative hidden lg:flex items-center min-h-[92vh] bg-sand-50 overflow-hidden pt-20">
+      <section className="relative hidden lg:flex items-center min-h-[92vh] bg-sand-50 overflow-hidden pt-24">
         <div className="mx-auto max-w-7xl px-8 w-full py-16">
           <div className="grid grid-cols-[1.1fr_1fr] gap-16 items-center">
             <Reveal>
